@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ExtensionList>
+    <Extension Id="com.MyCompany.LanguageCep.extension1">
+        <HostList>
+            <Host Name="PHXS" Port="8088" />
+            <Host Name="ILST" Port="8088" />
+            <Host Name="PPRO" Port="8088" />
+            <Host Name="AEFT" Port="8088" />
+        </HostList>
+    </Extension>
+</ExtensionList>

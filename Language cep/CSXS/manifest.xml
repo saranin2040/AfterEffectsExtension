@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ExtensionManifest Version="5.0" ExtensionBundleId="com.MyCompany.LanguageCep" ExtensionBundleVersion="1.0.0" ExtensionBundleName="LanguageCep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ExtensionList>
+        <Extension Id="com.MyCompany.LanguageCep.extension1" Version="1.0" />
+    </ExtensionList>
+    
+    <ExecutionEnvironment>
+        <HostList>
+            <Host Name="AEFT" Version="[18.0,23.9]" />
+        </HostList>
+        <LocaleList>
+            <Locale Code="All" />
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="5.0" />
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.MyCompany.LanguageCep.extension1">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./src/main/languagecep/Visual/html/MainPage/MainPage.html</MainPath>
+                    <CEFCommandLine>
+                    <Parameter>--enable-nodejs</Parameter>
+                    <Parameter>--mixed-context</Parameter>
+                    <Parameter>--allow-file-access</Parameter>
+                    <Parameter>--allow-file-access-from-files</Parameter>
+                    </CEFCommandLine>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>Language Cep</Menu>
+                    <Geometry>
+                        <Size>
+                            <Height>100</Height>
+                            <Width>250</Width>
+                        </Size>
+                        <MaxSize>
+                            <Height>500</Height>
+                            <Width>500</Width>
+                        </MaxSize>
+                        <MinSize>
+                            <Height>100</Height>
+                            <Width>250</Width>
+                        </MinSize>
+                    </Geometry>
+                </UI>
+                <!-- Добавьте этот тег, если хотите включить отладку в production-среде -->
+                <DebugInProduction>true</DebugInProduction>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>
