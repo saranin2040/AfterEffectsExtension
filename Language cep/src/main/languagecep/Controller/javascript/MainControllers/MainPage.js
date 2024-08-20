@@ -24,13 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    if (window.cep && window.cep.node && window.cep.node.require) {
-        console.log('First line:', firstLine);
-    } else {
-        console.error('CEP environment or Node.js is not available.');
-    }
-
-
 //     if (window.cep && window.cep.node && window.cep.node.require) {
 
 //         const fs = window.cep.node.require('fs');

@@ -1,7 +1,18 @@
  const ScriptsPaths =  Object.freeze({
-    addText: "AddText.jsx",
-    addTextByArg: "AddTextByArg.jsx",
-    alert: "Alert.jsx",
+    startVoidNull: Object.freeze({
+        addText: "AddText.jsx",
+        test: "Test.jsx",
+    }),
+    startArgNull: Object.freeze({
+        addTextByArg: "AddTextByArg.jsx",
+        test: "Test.jsx",
+    }),
+    startVoidReturn: Object.freeze({
+        test: "Test.jsx",
+    }),
+    startArgReturn: Object.freeze({
+        test: "Test.jsx",
+    }),
 });
 
 

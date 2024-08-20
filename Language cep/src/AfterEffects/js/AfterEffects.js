@@ -6,26 +6,37 @@ const ScriptsPaths = require("C:/Program Files (x86)/Common Files/Adobe/CEP/exte
 
  class AfterEffects {
 
-    addText() {
+    async addText() {
         const launchScript = new LaunchScript();
 
+        var popik = await launchScript.startVoidReturn(ScriptsPaths.startVoidReturn.test);
 
-        launchScript.startVoidNull(ScriptsPaths.addText);
+        console.log("your message"+popik);
 
-        const data = {
-            text: "Hello from CEP!",
-            layerName: "My Custom Layer"
-        };
+        // launchScript.startVoidNull(ScriptsPaths.addText);
 
-        launchScript.startArgNull(data,ScriptsPaths.addTextByArg);
+        // const data = {
+        //     text: "Hello from CEP!",
+        //     layerName: "My Custom Layer"
+        // };
+
+        // launchScript.startArgNull(data,ScriptsPaths.addTextByArg);
         
         console.log("You have catched me, Creeper 228");
     }
 
-    alert()
+    async findCompositionByName(nameComp)
     {
         const launchScript = new LaunchScript();
-        launchScript.startVoidNull(ScriptsPaths.alert);
+
+        const data = {
+                text: "tuz life",
+                layerName: "My Custom Layer"
+            };
+
+        var popik2 = await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.test);
+
+        console.log("your message twice: "+popik2);
     }
 }
 
