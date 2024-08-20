@@ -1,46 +1,21 @@
-import { AfterEffects } from "../../../../AfterEffects/js/AfterEffects";
+//import { AfterEffects } from "../../../../AfterEffects/js/AfterEffects";
 
-export class BusinessLogic {
+const AfterEffects = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/AfterEffects/js/AfterEffects");
+const fs = require('fs');
+const path = require('path');
 
-    pasteLanguagesMaterials() 
+ class BusinessLogic {
+
+    pasteLanguagesMaterials(workFolderPath) 
     {
         const afterEffects = new AfterEffects();
+        const translations = this.#getTranslations('C:\\Users\\aldan\\AppData\\Local\\Programs\\Python\\Python312\\saves\\translations.json');
 
 
+        
 
 
-        //var webpack = require('webpack');
-        var path = require('path');
-        var fs = require('fs');
-
-       // fs.mkdirSync("C:/r/poop", { recursive: true });
-
-
-
-
-        afterEffects.alert();
-
-        // // Путь к файлу
-        const filePath = 'C:\\Users\\aldan\\AppData\\Local\\Programs\\Python\\Python312\\saves\\translations.txt';
-
-        // Чтение файла
-        // fs.readFile(filePath, 'utf8', (err, data) => {
-        //     if (err) {
-        //         console.error(`Error reading file: ${err.message}`);
-        //         return;
-        //     }
-
-        //     // Разделение содержимого на строки и получение первой строки
-        //     const lines = data.split('\n');
-        //     const firstLine = lines[0].trim();
-
-        //     console.log(`First line of the file: ${firstLine}`);
-        // })
-
-
-        //const fontlist = require('../../../../../node_modules/font-list');
-
-        const translations = this.#getTranslations("C:/Users/aldan/AppData/Local/Programs/Python/Python312/saves/translations.jsx");
+        console.log(workFolderPath);
 
         
         afterEffects.addText();
@@ -48,11 +23,32 @@ export class BusinessLogic {
 
     #getTranslations(filePath)
     {
-
-    }
-
-    alert(){
-        const afterEffects = new AfterEffects();
-        afterEffects.alert();
+        try {
+            console.log("Starting loadTranslations function");
+            
+            // Проверяем, существует ли файл
+            if (fs.existsSync(filePath)) {
+                console.log("Translations file found");
+    
+                // Читаем файл
+                const fileContent = fs.readFileSync(filePath, 'utf8');
+                console.log("File read successfully");
+                
+                // Парсинг JSON содержимого
+                const translations = JSON.parse(fileContent);
+                console.log("Parsed translations: ", translations);
+    
+                return translations;
+            } else {
+                console.log("Translations file not found at: " + filePath);
+                return null;
+            }
+        } catch (e) {
+            console.error("Error in loadTranslations: " + e.toString());
+            return null;
+        }
     }
 }
+
+module.exports = BusinessLogic;
+

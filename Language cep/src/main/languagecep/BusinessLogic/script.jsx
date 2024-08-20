@@ -68,6 +68,7 @@ function findCompByName(name) {
         
         // Add event listener to the button
         selectFolderBtn.onClick = function() {
+//================================================================================================================
             var selectedFolder = Folder.selectDialog("Select a folder containing 'Audio' and 'Pictures' folders");
             if (selectedFolder) {
                 var audioFolder = new Folder(selectedFolder.fsName + "/Audio");
@@ -174,7 +175,7 @@ function findCompByName(name) {
                 alert("No folder selected.");
             }
         };
-        
+//================================================================================================================   
         win.center();
         win.show();
 

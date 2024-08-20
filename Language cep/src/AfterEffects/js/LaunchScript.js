@@ -1,4 +1,4 @@
-export class LaunchScript {
+ class LaunchScript {
 
     startVoidNull(scriptPath) {
 
@@ -92,3 +92,5 @@ export class LaunchScript {
     // }
 
 }
+
+module.exports = LaunchScript;

@@ -1,4 +1,4 @@
-class ActionListener {
+ class ActionListener {
 
     constructor(bc)
     {

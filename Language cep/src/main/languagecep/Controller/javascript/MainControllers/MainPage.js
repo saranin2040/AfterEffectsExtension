@@ -1,11 +1,11 @@
-//import { ActionListener } from "../ActionListener/ActionListener";
-//import { BusinessLogic } from "../../../BusinessLogic/js/BusinessLogic";
-//import { ClickOnButtonMainController } from "../ActionListener/ClickOnButtonMainController";
+// import { ActionListener } from "../ActionListener/ActionListener";
+// import { BusinessLogic } from "../../../BusinessLogic/js/BusinessLogic";
+// import { ClickOnButtonMainController } from "../ActionListener/ClickOnButtonMainController";
 
 
 const ActionListener = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/main/languagecep/Controller/javascript/ActionListener/ActionListener");
-const BusinessLogic = require("../../../BusinessLogic/js/BusinessLogic");
-const ClickOnButtonMainController = require("../ActionListener/ClickOnButtonMainController");
+const BusinessLogic = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/main/languagecep/BusinessLogic/js/BusinessLogic");
+const ClickOnButtonMainController = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/main/languagecep/Controller/javascript/ActionListener/ClickOnButtonMainController");
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const bc = new BusinessLogic();
+
 
 
     if (window.cep && window.cep.node && window.cep.node.require) {

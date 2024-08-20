@@ -1,7 +1,10 @@
-import { LaunchScript } from "./LaunchScript";
-import { ScriptsPaths } from './ScriptsPaths';
+//import { LaunchScript } from "./LaunchScript";
+//import { ScriptsPaths } from './ScriptsPaths';
 
-export class AfterEffects {
+const LaunchScript = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/AfterEffects/js/LaunchScript");
+const ScriptsPaths = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/AfterEffects/js/ScriptsPaths");
+
+ class AfterEffects {
 
     addText() {
         const launchScript = new LaunchScript();
@@ -25,3 +28,5 @@ export class AfterEffects {
         launchScript.startVoidNull(ScriptsPaths.alert);
     }
 }
+
+module.exports = AfterEffects;
