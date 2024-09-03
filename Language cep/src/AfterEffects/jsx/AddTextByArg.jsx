@@ -7,5 +7,7 @@ function performe(data) {
     } else {
         alert("No active composition found.");
     }
+
+    return true;
 }
 

@@ -25,18 +25,176 @@ const ScriptsPaths = require("C:/Program Files (x86)/Common Files/Adobe/CEP/exte
         console.log("You have catched me, Creeper 228");
     }
 
-    async findCompositionByName(nameComp)
+    async findCompositionByName(compName)
     {
         const launchScript = new LaunchScript();
 
         const data = {
-                text: "tuz life",
-                layerName: "My Custom Layer"
-            };
+            compName: compName,
+        };
 
-        var popik2 = await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.test);
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.findCompositionByName);
+    }
 
-        console.log("your message twice: "+popik2);
+    async beginUndoGroup(nameGroup)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            nameGroup: nameGroup,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.beginUndoGroup);
+    }
+
+    async endUndoGroup()
+    {
+        const launchScript = new LaunchScript();
+
+        return await launchScript.startVoidReturn(ScriptsPaths.startVoidReturn.endUndoGroup);
+    }
+
+    async getCurrentComposition()
+    {
+        const launchScript = new LaunchScript();
+
+        return await launchScript.startVoidReturn(ScriptsPaths.startVoidReturn.getCurrentComposition);
+    }
+
+    async importFile(filePath)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            filePath: filePath,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.importFile);
+    }
+
+    async addLayerToComposition(compId,idItem,startTime,inPoint,endTime)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId:compId,
+            idItem: idItem,
+            startTime:startTime,
+            inPoint: inPoint,
+            endTime:endTime,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.addLayerToComposition);
+    }
+
+    async getDurationFile(idItem)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            idItem: idItem,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.getDurationFile);
+    }
+
+    async duplicateComposition(compId,name)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+            name: name,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.duplicateComposition);
+    }
+
+    async getStartTime(compId,idItem)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+            idItem: idItem,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.getStartTime);
+    }
+
+    async openCompositionInViewer(compId)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.openCompositionInViewer);
+    }
+
+    async setTextLayerValue(compId, layerName, newValue,font)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+            layerName:layerName,
+            newValue: newValue,
+            font: font,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.setTextLayerValue);
+    }
+
+    async setKeyScaleAnimation(compId, itemId,valueX,valueY, time,easeInS,easeInIn,easeOutS,easeOutIn)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+            itemId:itemId,
+            valueX: valueX,
+            valueY: valueY,
+            time: time,
+            easeInS: easeInS,
+            easeInIn: easeInIn,
+            easeOutS: easeOutS,
+            easeOutIn: easeOutIn,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.setKeyScaleAnimation);
+    }
+
+    async setKeyPostionAnimation(compId,itemId,valueX,valueY,time)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+            itemId:itemId,
+            valueX: valueX,
+            valueY: valueY,
+            time: time,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.setKeyPostionAnimation);
+    }
+
+    async setKeyRotationAnimation(compId,itemId,value,time,easeIn,easeOut)
+    {
+        const launchScript = new LaunchScript();
+
+        const data = {
+            compId: compId,
+            itemId:itemId,
+            value: value,
+            time: time,
+            easeIn: easeIn,
+            easeOut: easeOut,
+        };
+
+        return await launchScript.startArgReturn(data,ScriptsPaths.startArgReturn.setKeyRotationAnimation);
     }
 }
 

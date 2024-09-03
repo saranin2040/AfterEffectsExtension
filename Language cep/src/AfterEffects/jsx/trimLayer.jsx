@@ -2,6 +2,7 @@ function performe(data)
 {
     try {
     
+    
         return data.text;
     
     } catch (error) {

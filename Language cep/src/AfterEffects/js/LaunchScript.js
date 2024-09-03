@@ -1,32 +1,31 @@
  class LaunchScript {
 
-    async startVoidNull(scriptPath) {
-
-        const csInterface = new CSInterface();
-        const scriptPathImproved = csInterface.getSystemPath(SystemPath.EXTENSION) + "/src/AfterEffects/jsx/"+scriptPath;
-        csInterface.evalScript('$.evalFile("' + scriptPathImproved + '")');
-    }
-    async startArgNull(data,scriptPath)
-    {
-        const csInterface = new CSInterface();
-        const scriptPathImproved = csInterface.getSystemPath(SystemPath.EXTENSION) + "/src/AfterEffects/jsx/"+scriptPath;
-
-        const jsonData = JSON.stringify(data);
-
-        const script = `
-            var data = '${jsonData}';
-            $.evalFile("${scriptPathImproved}");
-            performe(data);
-        `;
-        
-        csInterface.evalScript(script);
-    }
-
     async startVoidReturn(scriptPath)
     {
         try {
             const result = await this.#startVoidReturn2(scriptPath);
             console.log("Result from script without args:", result);
+
+            if (result=="null")
+            {
+                return null;
+            }
+
+            if (result=="true")
+            {
+                return true;
+            }
+
+            if (result=="false")
+            {
+                return false;
+            }
+
+            if (!isNaN(result)) {
+                let result2 = Number(result);
+                return result2;
+            } 
+    
             return result;
         } catch (error) {
             console.error("Error:", error);
@@ -38,7 +37,28 @@
     {
         try {
             const result = await this.#startArgReturn2(data,scriptPath);
-            console.log("Result from script without args:", result);
+            console.log("Result from script with args:", result);
+
+            if (result=="null")
+            {
+                return null;
+            }
+
+            if (result=="true")
+            {
+                return true;
+            }
+
+            if (result=="false")
+            {
+                return false;
+            }
+
+            if (!isNaN(result)) {
+                let result2 = Number(result);
+                return result2;
+            } 
+
             return result;
         } catch (error) {
             console.error("Error:", error);
@@ -51,11 +71,23 @@
         const csInterface = new CSInterface();
         const scriptPathImproved = csInterface.getSystemPath(SystemPath.EXTENSION) + "/src/AfterEffects/jsx/" + scriptPath;
 
+        const script = `
+        $.evalFile("${scriptPathImproved}");
+        var result = performe(); // Получаем значение из скрипта
+        result;
+        `;
+
+
         return new Promise((resolve, reject) => {
-            csInterface.evalScript('$.evalFile("' + scriptPathImproved + '")', function(result) {
-                if (result !== "EvalScript error.") {
+            csInterface.evalScript(script, function(result) {
+                if (result !== "EvalScript error." && !result.startsWith("Error:")) {
                     resolve(result); 
-                } else {
+                } 
+                else if (result.startsWith("Error:"))
+                {
+                    reject(result);
+                }
+                else {
                     reject("Error executing script"); 
                 }
             });
@@ -79,9 +111,14 @@
 
         return new Promise((resolve, reject) => {
             csInterface.evalScript(script, function(result) {
-                if (result !== "EvalScript error.") {
+                if (result !== "EvalScript error." && !result.startsWith("Error:")) {
                     resolve(result); // Возвращаем результат через Promise
-                } else {
+                } 
+                else if (result.startsWith("Error:"))
+                {
+                    reject(result);
+                }
+                else {
                     reject("Error executing script"); // Обрабатываем ошибку
                 }
             });

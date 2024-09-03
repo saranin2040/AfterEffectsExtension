@@ -1,5 +1,7 @@
-function performe(text) {
+function performe() {
     var comp = app.project.activeItem;
+
+    text=hui;
 
     $.writeln("dodik");
 
@@ -9,6 +11,6 @@ function performe(text) {
     } else {
         alert("No active composition found.");
     }
-}
 
-performe("Hello, After Effects!");
+    return true;
+}
