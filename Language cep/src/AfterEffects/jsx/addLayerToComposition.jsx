@@ -39,6 +39,10 @@ function addLayerToComposition(comp, idItem, startTime,inPoint,endTime) {
         //alert("layer.id = "+layer.id);
         layer.outPoint = endTime;
 
+        if (layer.canSetCollapseTransformation) {
+            layer.collapseTransformation = true;  // Включаем "Collapse Transformations" (солнышко)
+        }
+
         return layer.id;
     } else {
         // Вы можете добавить обработку ошибки, если аудиофайл не найден

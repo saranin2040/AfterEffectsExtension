@@ -6,34 +6,195 @@ const path = require('path');
 
  class BusinessLogic {
 
+
+    findFolder(basePath, nameFolder) {
+        console.log("basePath: "+basePath);
+        try {
+            const items = fs.readdirSync(basePath);
+            
+            console.log(items);
+            
+            for (let item of items) {
+                const itemPath = path.join(basePath, item);
+                console.log("номер: "+item);
+                console.log("путь: "+itemPath);
+                console.log(item.toLowerCase()+" vs "+nameFolder);
+
+                
+                // Проверяем, является ли элемент папкой и называется ли она "Audio"
+                if (fs.statSync(itemPath).isDirectory() && item === nameFolder) {
+                    return itemPath;  // Возвращаем полный путь к папке Audio
+                }
+            }
+    
+            // Если папка не найдена
+            return null;
+        } catch (error) {
+            console.error("Error:", error.message);
+            return null;
+        }
+    }
+
     pasteLanguagesMaterials(workFolderPath) 
     {
         var audioFiles;
 
         const translations = this.#getTranslations('C:\\Users\\aldan\\AppData\\Local\\Programs\\Python\\Python312\\saves\\translations.json');
-        
 
-        const audioFolder = path.join(workFolderPath, 'Audio');
+      //  const audioFolder = path.join(workFolderPath, 'Audio');
+        const audioFolder = this.findFolder(workFolderPath, 'Audio');
+
         const picturesFolder = path.join(workFolderPath, 'Pictures');
         
         const mainAudioFile = path.join(audioFolder, 'English.mp3');
+        
+
+     //   try{
+        this.#validityCheck(translations,audioFolder,picturesFolder,mainAudioFile);
+      //  }
+     //   catch(e)
+      //  {
+      //      alert(e);
+      //  }
+        
 
         audioFiles = fs.readdirSync(audioFolder).filter(file => {
             return file.match(/\.(wav|mp3)$/i) && file !== "English.mp3";
         });
         
-        if (!this.#validityCheck(audioFiles,translations,audioFolder,picturesFolder,mainAudioFile)) { return; }
 
+        if (audioFiles.length === 0) {
+            alert("No.. noooo... NOOOOOOOOO!!!! THESE AUDIO FILES dont exist in the 'Audio' folder, brooo");
+            return;
+        }
         
         this.#pasteLanguagesMaterials_exAsync(audioFiles,translations,audioFolder,picturesFolder,mainAudioFile);
-
-
-
-        
-        
     }
 
     async #pasteLanguagesMaterials_exAsync(audioFiles,translations,audioFolder,picturesFolder,mainAudioFile)
+    {
+        const ae = new AfterEffects();
+
+        var compId;
+        
+
+        var translateComp = await ae.findCompositionByName(this.compositions.translateComp);
+        var translationHitLeft = await ae.findCompositionByName(this.compositions.translationHitLeft);
+        
+        if (!translateComp) {
+            alert("Translate Scene composition not found.");
+            return;
+        }
+
+        await ae.beginUndoGroup(this.undoGroups.buildLanguageVideo);
+
+        compId = await ae.getCurrentComposition();
+
+        if (compId===null)
+        {
+            alert("you're high on marijuana, you want to generate a video on nothing WITHOUT SELECTING a COMPOSITION!!!!!");
+            await ae.endUndoGroup();
+            return;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        // Пример использования:
+        shuffleArray(audioFiles);
+        
+
+        let currentTime = 0;
+        for (let i = 0; i < audioFiles.length; i++) {
+            const audioFile = path.join(audioFolder, audioFiles[i]);
+            const audioFileName = path.basename(audioFile, path.extname(audioFile));
+
+            // Импорт и добавление English.wav
+            const importedMainAudio = await ae.importFile(mainAudioFile);//+\
+            const englishDuration = await ae.getDurationFile(importedMainAudio);
+            var startTime_ImportedMainAudioLayer = currentTime;
+
+            var importedMainAudioLayer = await ae.addLayerToComposition(compId, importedMainAudio, currentTime,currentTime,currentTime+englishDuration);
+
+
+            //alert("importedMainAudioLayer = "+importedMainAudioLayer);
+
+
+            //alert("currentTime: "+currentTime);
+
+            var startPositionAnimation = currentTime + englishDuration;
+            var endPositionAnimation = startPositionAnimation+0.5;
+            currentTime += englishDuration + 0.5;
+            
+
+            const importedAudio = await ae.importFile(audioFile);
+            const audioDuration = await ae.getDurationFile(importedAudio);
+
+            var importedAudioLayer = await ae.addLayerToComposition(compId, importedAudio, currentTime,currentTime,currentTime+audioDuration);
+            
+            
+            currentTime += audioDuration;
+
+        // // Дублирование композиции Translate Scene
+            
+
+            const newComp = await ae.duplicateComposition(translateComp,`Translate Scene ${audioFileName}`);
+            
+            const newCompLayer = await ae.addLayerToComposition(compId, newComp, startTime_ImportedMainAudioLayer, startTime_ImportedMainAudioLayer, currentTime);
+            await ae.setKeyPostionAnimation(compId,newCompLayer,1850,400,startPositionAnimation);
+            await ae.setKeyPostionAnimation(compId,newCompLayer,145,400,endPositionAnimation);
+            await ae.setKeyScaleAnimation(compId,newCompLayer,197,197,0,0,33,0,33);
+
+        // // Обновление текстовых слоев в дублированной композиции
+            await ae.openCompositionInViewer(newComp);
+            await ae.setTextLayerValue(newComp, "top left", "English",null);
+            await ae.setTextLayerValue(newComp, "top right", audioFileName,null);
+            await ae.setTextLayerValue(newComp, "bottom left", translations["English"],null);
+            await ae.setTextLayerValue(newComp, "bottom right", translations[audioFileName],this.fonts[audioFileName]);
+
+            await ae.openCompositionInViewer(compId);
+
+            var startTransition = startTime_ImportedMainAudioLayer - 0.36;
+            await ae.addLayerToComposition(compId, translationHitLeft, startTransition,startTransition,startTransition+1.63);
+
+
+            // Импорт и добавление соответствующего изображения
+            const correspondingImageFile = path.join(picturesFolder, `${audioFileName}.png`);
+            const infMusic = this.#getMusic(audioFileName);
+            
+            if (fs.existsSync(correspondingImageFile)) {
+                const correspondingImage = await ae.importFile(correspondingImageFile);
+                const correspondingImageLayer = await ae.addLayerToComposition(compId, correspondingImage, currentTime, currentTime,currentTime+5);
+                
+                
+              //  alert(6);
+                await ae.setKeyScaleAnimation(compId,correspondingImageLayer,250,250,currentTime,0,16,2.5,53);
+                await ae.setKeyScaleAnimation(compId,correspondingImageLayer,100,100,currentTime+3,2.5,42,0,16);
+                await ae.setKeyRotationAnimation(compId,correspondingImageLayer,this.#getRandomAngle(),currentTime,16,53);
+                await ae.setKeyRotationAnimation(compId,correspondingImageLayer,0,currentTime+3,43,16);
+                
+                
+
+                const music = await ae.importFile(infMusic.pathToFile);
+                await ae.addLayerToComposition(compId, music, currentTime-infMusic.startTime, currentTime,currentTime+5);
+
+
+                currentTime += 5;
+            }
+        }
+
+        await ae.endUndoGroup();
+
+        alert("cooooooooooooooooooooooooooool: ");
+
+        //await ae.addText();
+    }
+
+    async #pasteEachByEachLanguagesMaterials_exAsync(audioFiles,translations,audioFolder,picturesFolder,mainAudioFile)
     {
 
 
@@ -115,7 +276,8 @@ const path = require('path');
 
         const ae = new AfterEffects();
 
-        var translateComp = await ae.findCompositionByName(this.translateComp);
+        var translateComp = await ae.findCompositionByName(this.compositions.translateComp);
+        var translationHitLeft = await ae.findCompositionByName(this.compositions.translationHitLeft);
         
 
         if (!translateComp) {
@@ -196,6 +358,10 @@ const path = require('path');
 
             await ae.openCompositionInViewer(compId);
 
+
+            
+
+
             // Импорт и добавление соответствующего изображения
             const correspondingImageFile = path.join(picturesFolder, `${audioFileName}.png`);
           //  const infMusic = this.#getMusic(audioFileName);
@@ -219,6 +385,10 @@ const path = require('path');
 
                 currentTime += 5;
             }
+
+
+
+
         }
 
         await ae.endUndoGroup();
@@ -236,7 +406,7 @@ const path = require('path');
     {
         try {
             // Путь к папке с музыкой
-            const baseDir = "X:/All/7. Work/Laungige Amir/music/music";
+            const baseDir = "X:/All/7. Work/Laungige Amir/music";
             const targetFolder = path.join(baseDir, audioFileName);
     
             // Проверяем, существует ли папка
@@ -292,29 +462,19 @@ const path = require('path');
     }
 
 
-    #validityCheck(audioFiles,translations,audioFolder,picturesFolder,mainAudioFile)
+    #validityCheck(translations,audioFolder,picturesFolder,mainAudioFile)
     {
-        if (audioFiles.length === 0) {
-            alert("No.. noooo... NOOOOOOOOO!!!! THESE AUDIO FILES dont exist in the 'Audio' folder, brooo");
-            return false;
-        }
-
         if (!translations) {
-            alert("Bruh, either English.wav is not there or translations.json is not there. I dont know, but I guess it is translations.json");
-            return false;
+            throw new Error("Bruh, either English.wav is not there or translations.json is not there. I dont know, but I guess it is translations.json");
         }
 
-        if (!fs.existsSync(audioFolder) || !fs.existsSync(picturesFolder)) {
-            alert("duuuude, both 'Audio' and 'Pictures' folders must exist in the selected directory, okay?");
-            return false;
+        if (audioFolder=== null || !fs.existsSync(audioFolder) || !fs.existsSync(picturesFolder)) {
+            throw new Error("duuuude, both 'Audio' and 'Pictures' folders must exist in the selected directory, okay?");
         }
 
         if (!fs.existsSync(mainAudioFile)) {
-            alert("Bruh, either English.wav is not there or translations.json is not there. I dont know, but I guess it is English.wav");
-            return false;
+            throw new Error("Bruh, either English.wav is not there or translations.json is not there. I dont know, but I guess it is English.wav");
         }
-
-        return true;
     }
 
     #getTranslations(filePath)
@@ -345,10 +505,19 @@ const path = require('path');
         }
     }
 
-    translateComp = "Translate Scene";
-
     undoGroups =  Object.freeze({
         buildLanguageVideo:"Import Audio, Compositions, and PNGs",
+    });
+
+    fonts = Object.freeze({
+        Amharic:"AbyssinicaSIL-Regular",
+        Georgian: "Helvetica-Regular",
+        Korean: "MaplestoryOTFLight"
+    });
+
+    compositions = Object.freeze({
+        translationHitLeft:"transition hit left",
+        translateComp: "Translate Scene"
     });
 
 }

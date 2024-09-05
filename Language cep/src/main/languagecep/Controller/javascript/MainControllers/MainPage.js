@@ -7,9 +7,10 @@ const ActionListener = require("C:/Program Files (x86)/Common Files/Adobe/CEP/ex
 const BusinessLogic = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/main/languagecep/BusinessLogic/js/BusinessLogic");
 const ClickOnButtonMainController = require("C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/Language cep/src/main/languagecep/Controller/javascript/ActionListener/ClickOnButtonMainController");
 
-
 document.addEventListener('DOMContentLoaded', () => {
 
+
+    
 
     function asActionListener(instance) {
         if (!(instance instanceof ActionListener)) {
@@ -46,7 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
    // const clickOnButtonMainController = new ClickOnButtonMainController();
 
-    document.getElementById('greetButton').addEventListener('click', () => actionListeners.startRender.actionPerformed());
+
+    try{
+        document.getElementById('greetButton').addEventListener('click', () => actionListeners.startRender.actionPerformed());
+    }
+    catch(e)
+    {
+        alert(e);
+    }
+    
 });
 
 //<script src="../../../../../dist/MainPage.js"></script> 

@@ -13,7 +13,9 @@ const ActionListener = require("C:/Program Files (x86)/Common Files/Adobe/CEP/ex
     {
         var sourceFolderPath;
         const folderInput = document.getElementById('folderInput');
+
         if (folderInput.files.length > 0) {
+
             sourceFolderPath = path.dirname(folderInput.files[0].path);
         } else {
             console.log("No folder selected.");

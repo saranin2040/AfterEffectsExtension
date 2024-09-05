@@ -25,6 +25,7 @@ function setTextLayerValue(comp, layerName, newValue,font) {
             if (font != null && font !== undefined && font !== "")
             {
                 textDocument.font = font;  
+               // alert("set "+font)
             }
 
             textProp.setValue(textDocument); 
