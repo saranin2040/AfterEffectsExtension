@@ -48,13 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
    // const clickOnButtonMainController = new ClickOnButtonMainController();
 
 
-    try{
+
         document.getElementById('greetButton').addEventListener('click', () => actionListeners.startRender.actionPerformed());
-    }
-    catch(e)
-    {
-        alert(e);
-    }
+   
     
 });
 

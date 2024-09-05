@@ -7,10 +7,13 @@ const ActionListener = require("C:/Program Files (x86)/Common Files/Adobe/CEP/ex
     constructor(bc)
     {
         super(bc);
+
     }
 
     actionPerformed() 
     {
+        try{
+
         var sourceFolderPath;
         const folderInput = document.getElementById('folderInput');
 
@@ -24,6 +27,12 @@ const ActionListener = require("C:/Program Files (x86)/Common Files/Adobe/CEP/ex
         this.getBc().pasteLanguagesMaterials(sourceFolderPath);
 
         console.log("Im so beautiful! :)");
+
+        }
+        catch(e)
+        {
+            alert(e);
+        }
     }
 }
 

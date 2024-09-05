@@ -48,14 +48,7 @@ const path = require('path');
         
         const mainAudioFile = path.join(audioFolder, 'English.mp3');
         
-
-     //   try{
         this.#validityCheck(translations,audioFolder,picturesFolder,mainAudioFile);
-      //  }
-     //   catch(e)
-      //  {
-      //      alert(e);
-      //  }
         
 
         audioFiles = fs.readdirSync(audioFolder).filter(file => {
@@ -64,8 +57,7 @@ const path = require('path');
         
 
         if (audioFiles.length === 0) {
-            alert("No.. noooo... NOOOOOOOOO!!!! THESE AUDIO FILES dont exist in the 'Audio' folder, brooo");
-            return;
+            throw new Error("No.. noooo... NOOOOOOOOO!!!! THESE AUDIO FILES dont exist in the 'Audio' folder, brooo");
         }
         
         this.#pasteLanguagesMaterials_exAsync(audioFiles,translations,audioFolder,picturesFolder,mainAudioFile);
@@ -82,8 +74,7 @@ const path = require('path');
         var translationHitLeft = await ae.findCompositionByName(this.compositions.translationHitLeft);
         
         if (!translateComp) {
-            alert("Translate Scene composition not found.");
-            return;
+            throw new Error("I donna want to swear on you:( But you forgot add 'Translation scene' ;( im sorry, my friend");
         }
 
         await ae.beginUndoGroup(this.undoGroups.buildLanguageVideo);
@@ -120,11 +111,6 @@ const path = require('path');
 
             var importedMainAudioLayer = await ae.addLayerToComposition(compId, importedMainAudio, currentTime,currentTime,currentTime+englishDuration);
 
-
-            //alert("importedMainAudioLayer = "+importedMainAudioLayer);
-
-
-            //alert("currentTime: "+currentTime);
 
             var startPositionAnimation = currentTime + englishDuration;
             var endPositionAnimation = startPositionAnimation+0.5;
